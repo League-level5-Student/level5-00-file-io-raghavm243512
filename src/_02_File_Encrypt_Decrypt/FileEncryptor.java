@@ -35,9 +35,6 @@ public class FileEncryptor {
 	}
 
 	public static String encrypt(byte[] strClearText) throws Exception {
-		for (int i =0;i<strClearText.length;i++) {
-			strClearText[i]=(byte) (strClearText[i]^'s');
-		}
 		return Base64.getEncoder().encodeToString(strClearText);
 	}	
 }	

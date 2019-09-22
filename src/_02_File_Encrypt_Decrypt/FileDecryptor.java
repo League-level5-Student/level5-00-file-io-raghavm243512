@@ -41,10 +41,7 @@ public class FileDecryptor {
 		} else System.exit(0);
 	}
 	public static String decrypt(byte[] strEncrypted) throws Exception{
-		byte[] a = Base64.getDecoder().decodeToString(strEncrypted);
-		for (int i =0;i<a.length;i++) {
-			a[i]=(byte) (a[i]^'s');
-		}
-		return Base64.getDecoder().decodeToString(strEncrypted);
+		return new String(Base64.getDecoder().decode(strEncrypted));
+		
 	}
 }
