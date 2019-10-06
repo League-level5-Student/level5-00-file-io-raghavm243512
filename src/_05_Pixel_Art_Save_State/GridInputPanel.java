@@ -1,6 +1,12 @@
 package _05_Pixel_Art_Save_State;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
@@ -13,6 +19,9 @@ public class GridInputPanel extends JPanel{
 	private JTextField rowsField;
 	private JTextField colsField;
 	private JButton submitButton;
+	private JButton load;
+	private boolean empty=true;
+	private Saver s;
 			
 	PixelArtMaker pam;
 	
@@ -24,6 +33,7 @@ public class GridInputPanel extends JPanel{
 		rowsField = new JTextField(5);
 		colsField = new JTextField(5);
 		submitButton = new JButton("Submit");
+		load = new JButton("Load from file");
 		
 		add(new JLabel("screen width:"));
 		add(windowWidthField);
@@ -34,10 +44,27 @@ public class GridInputPanel extends JPanel{
 		add(new JLabel("\ttotal columns:"));
 		add(colsField);
 		add(submitButton);
+		add(load);
 		
 		submitButton.addActionListener((e)->submit());
+		load.addActionListener((e)->load());
 	}
 	
+	private void load() {
+		JFileChooser jfc = new JFileChooser();
+		int returnVal = jfc.showOpenDialog(null);
+		if (returnVal == JFileChooser.APPROVE_OPTION) {
+			String fileName = jfc.getSelectedFile().getAbsolutePath();
+			s = new Saver().load(fileName);
+			windowWidthField.setText(Integer.toString(s.w));
+			windowHeightField.setText(Integer.toString(s.h));
+			rowsField.setText(Integer.toString(s.r));
+			colsField.setText(Integer.toString(s.c));
+			empty=false;
+		}
+		
+	}
+
 	private void submit() {
 		boolean valid = false;
 		int w = -1;
@@ -59,8 +86,10 @@ public class GridInputPanel extends JPanel{
 			invalidateInput();
 		}
 		
-		if(valid) {
-			pam.submitGridData(w, h, r, c);
+		if(valid&&empty) {
+			pam.submitGridData(w, h, r, c, null);
+		} else if (valid) {
+			pam.submitGridData(w, h, r, c, s.coloredPixels);
 		}
 	}
 	

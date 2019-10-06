@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 public class GridPanel extends JPanel{
@@ -49,15 +50,20 @@ public class GridPanel extends JPanel{
 	public void setColor(Color c) {
 		color = c;
 	}
-	
+	public void replacePixel(Pixel p, int r, int c) {
+		pixels[r][c]=p;
+	}
 	public void clickPixel(int mouseX, int mouseY) {
 		//5. Use the mouseX and mouseY variables to change the color
 		//   of the pixel that was clicked. *HINT* Use the pixel's dimensions.
 		System.out.println(color.toString().substring(14)+"("+mouseX/pixelWidth + ":" + mouseY/pixelHeight+")");
-		s.addPixel(color.toString().substring(14)+"("+mouseX/pixelWidth + ":" + mouseY/pixelHeight+")");
 		pixels[mouseX/pixelWidth][mouseY/pixelHeight].color=color;
+		s.addPixel(mouseX/pixelWidth + ":" + mouseY/pixelHeight,pixels[mouseX/pixelWidth][mouseY/pixelHeight]);
 	}
-	
+	public void save() {
+		String str = JOptionPane.showInputDialog("Enter file name with no extension");
+		s.save(str);
+	}
 	@Override
 	public void paintComponent(Graphics g) {
 		//4. Iterate through the array.
